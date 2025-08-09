@@ -116,4 +116,5 @@ export const fetchaddressloading = (state) => state.address.fetchAddressloading;
 export const fetchaddressError = (state) => state.address.fetchAddresserror;
 export const getAddresses = (state) => state.address.address;
 export const { selectUserAddress } = addressSlice.actions;
+export const getSelectedAddress = (state) => state.address.selectedAddress;
 export default addressSlice.reducer;

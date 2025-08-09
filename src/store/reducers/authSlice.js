@@ -25,6 +25,10 @@ const authSlice = createSlice({
 	reducers: {
 		LogoutUser(state, action) {
 			localStorage.removeItem("auth");
+			localStorage.removeItem("address");
+			localStorage.removeItem("selectedAddress");
+			localStorage.removeItem("clientSecret");
+			localStorage.removeItem("cartItems");
 			state.user = null;
 		},
 	},

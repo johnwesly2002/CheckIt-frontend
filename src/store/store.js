@@ -6,6 +6,8 @@ import authSlice from "./reducers/authSlice";
 import registerSlice from "./reducers/registerSlice";
 import addressSlice from "./reducers/addressSlice";
 import paymentSlice from "./reducers/paymentSlice";
+import clientSecretSlice from "./reducers/clientSecretSlice";
+import stripeSlice from "./reducers/stripeSlice";
 const cartItems = localStorage.getItem("cartItems")
 	? JSON.parse(localStorage.getItem("cartItems"))
 	: [];
@@ -34,6 +36,8 @@ const rootreducer = combineReducers({
 	register: registerSlice,
 	address: addressSlice,
 	payment: paymentSlice,
+	clientSecret: clientSecretSlice,
+	stripe: stripeSlice,
 });
 
 const store = configureStore({
