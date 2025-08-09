@@ -1,5 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
+import { api } from "../../api/api";
+import { get } from "react-hook-form";
 const initialState = {
 	cart: [],
 	loading: false,
@@ -7,6 +9,30 @@ const initialState = {
 	totalPrice: 0,
 	cartId: null,
 };
+
+export const CreateUserCart = createAsyncThunk(
+	"cart/createUserCart",
+	async (payload, { dispatch }) => {
+		try {
+			const res = await api.post("cart/create", payload);
+
+			await dispatch(getCart());
+
+			return res.data;
+		} catch (err) {
+			throw new Error("Error Occured while creating Cart.");
+		}
+	}
+);
+
+const getCart = createAsyncThunk("cart/getCart", async () => {
+	try {
+		const res = await api.get(`/carts/users/cart`);
+		return res.data;
+	} catch (err) {
+		throw new Error("Error while Fetching CartItems.");
+	}
+});
 
 const findItemIndex = (state, action) =>
 	state.cart.findIndex(
@@ -61,6 +87,26 @@ const cartSlice = createSlice({
 			localStorage.setItem("cartItems", JSON.stringify(state.cart));
 		},
 	},
+	extraReducers: (builder) => {
+		builder
+			.addCase(getCart.pending, (state) => {
+				state.loading = true;
+			})
+			.addCase(getCart.fulfilled, (state, action) => {
+				state.loading = false;
+				state.error = null;
+				console.log(action.payload);
+				state.cart = action.payload.products;
+				state.totalPrice = action.payload.totalPrice;
+				state.cartId = action.payload.cartId;
+				localStorage.setItem("cartItems", JSON.stringify(state.cart));
+			})
+			.addCase(getCart.rejected, (state) => {
+				state.loading = false;
+				state.error = action.payload.error;
+				toast.error("Error while creating Cart.");
+			});
+	},
 });
 
 export const {
@@ -69,5 +115,10 @@ export const {
 	DecreaseQuantity,
 	removeCartItem,
 } = cartSlice.actions;
+
+export const getCartId = (state) => state.carts.cartId;
+export const getUserCart = (state) => state.carts.cart;
+
+export const getUserCartTotalPrice = (state) => state.carts.totalPrice;
 
 export default cartSlice.reducer;

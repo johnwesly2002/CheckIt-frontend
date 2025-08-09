@@ -4,7 +4,6 @@ import { api } from "../../api/api";
 const initialState = {
 	loading: false,
 	user: null,
-	address: [],
 	error: null,
 };
 

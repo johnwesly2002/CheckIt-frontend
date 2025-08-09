@@ -6,3 +6,7 @@ export default function formatPrice(amount) {
 		currency: "INR",
 	}).format(amount);
 }
+
+export const formtPriceQuanity = (quantity, price) => {
+	return (Number(quantity) * Number(price)).toFixed(2);
+};
